@@ -1,8 +1,11 @@
 package com.wu.controller;
 
+import com.wu.bean.SignInfo;
+import com.wu.bean.UserInfo;
 import com.wu.service.SignInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -15,13 +18,13 @@ public class SignInfoController {
     private SignInfoService signInfoService;
     @RequestMapping( "/signIn1" )
     @ResponseBody
-    public Map<String,Object> signIn1(String userID,String userName){
-        return signInfoService.genSign1(userID,userName);
+    public Map<String,Object> signIn1(@RequestBody SignInfo signInfo){
+        return signInfoService.genSign1(signInfo.getUserID(),signInfo.getUserName());
     }
     @RequestMapping( "/signIn2" )
     @ResponseBody
-    public Map<String,Object> signIn2(String name,String phone,String nickName,String avatarUrl){
-        return signInfoService.genSign2(name,phone,nickName,avatarUrl);
+    public Map<String,Object> signIn2(@RequestBody UserInfo userInfo){
+        return signInfoService.genSign2(userInfo.getName(),userInfo.getPhone(),userInfo.getNickName(),userInfo.getAvatarUrl());
     }
 
     @RequestMapping( "/signNames" )

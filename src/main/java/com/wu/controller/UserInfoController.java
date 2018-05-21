@@ -4,6 +4,7 @@ import com.wu.bean.UserInfo;
 import com.wu.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -24,16 +25,16 @@ public class UserInfoController {
     private UserInfoService userInfoService;
     @RequestMapping( "/genUser" )
     @ResponseBody
-//    public Map<String, Object> genUser(@RequestBody UserInfo userInfo){
-//        return userInfoService.insertOne(userInfo.getName(),userInfo.getGender(),userInfo.getPhone(),userInfo.getBirthDate(),userInfo.getCalendar(),userInfo.getNickName(),userInfo.getAvatarUrl());
-//    }
-    public Map<String, Object> genUser(String name,String gender,String phone,String birthday,String calender,String nickName,String avatarUrl){
-        return userInfoService.insertOne(name,gender,phone,birthday,calender,nickName,avatarUrl);
+    public Map<String, Object> genUser(@RequestBody UserInfo userInfo){
+        return userInfoService.insertOne(userInfo.getName(),userInfo.getGender(),userInfo.getPhone(),userInfo.getBirthDate(),userInfo.getCalendar(),userInfo.getNickName(),userInfo.getAvatarUrl());
     }
+//    public Map<String, Object> genUser(String name,String gender,String phone,String birthday,String calender,String nickName,String avatarUrl){
+//        return userInfoService.insertOne(name,gender,phone,birthday,calender,nickName,avatarUrl);
+//    }
     @RequestMapping( "/getUserList" )
     @ResponseBody
-    public List<UserInfo> getUserList(String nickName,String avatarUrl){
-        return userInfoService.selectAllByDevice(nickName,avatarUrl);
+    public List<UserInfo> getUserList(@RequestBody UserInfo userInfo){
+        return userInfoService.selectAllByDevice(userInfo.getNickName(),userInfo.getAvatarUrl());
     }
     @RequestMapping( "/getCurrtPerson" )
     @ResponseBody
