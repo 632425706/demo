@@ -4,6 +4,7 @@ import com.wu.bean.DeviceInfo;
 import com.wu.bean.UserInfo;
 import com.wu.dao.DeviceInfoDao;
 import com.wu.dao.UserInfoDao;
+import com.wu.util.CalendarUtil;
 import com.wu.util.LunarUtil;
 import com.wu.util.MD5Utils;
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -60,19 +62,42 @@ public class UserInfoService {
             }
             userInfo.setPhone(phone);
             String birthday="";
+            String solar="";
 //            ----------------------------------------------
 //            1是农历  0是阳历
            try{
                if (calendar.equals("1")){
                    String[] dayStrs = dateValue.split("@");
                    int mouthNum=Integer.parseInt(dayStrs[0]);
+                   String mouthStr="";
+                   if (mouthNum<10){
+                       mouthStr="0"+mouthNum;
+                   }else {
+                       mouthStr=""+mouthNum;
+                   }
                    int dayNum=Integer.parseInt(dayStrs[1]);
+                   String dayStrr="";
+                   if (dayNum<10){
+                       dayStrr="0"+dayNum;
+                   }else {
+                       dayStrr=""+dayNum;
+                   }
+                   Calendar a=Calendar.getInstance();
+                   int year=a.get(Calendar.YEAR);
+                   Boolean isRunNain=false;
+                   if(year%4==0&&year%100!=0||year%400==0) isRunNain=true;
+                   String dayStr=CalendarUtil.lunarToSolar(year+mouthStr+dayStrr,isRunNain);
+                   SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");
+                   SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM-dd");
+                   solar=dateFormat2.format(dateFormat1.parse(dayStr));
                    birthday=mouths[mouthNum-1]+"月"+days[dayNum-1];
+                   userInfo.setSolar(solar);
                }else {
                    String[] dayStrs = dateValue.split("@");
                    int mouthNum=Integer.parseInt(dayStrs[0]);
                    int dayNum=Integer.parseInt(dayStrs[1]);
                    birthday=(mouthNum)+"-"+(dayNum);
+                   userInfo.setSolar(birthday);
                }
            }catch (Exception e){
                logger.info("获得日期失败"+dateValue+" "+calendar);

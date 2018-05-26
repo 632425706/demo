@@ -23,4 +23,5 @@ public class UserInfo {
         private String md5Code;
         private String nickName;
         private String avatarUrl;
+        private String solar;
 }

@@ -1,6 +1,7 @@
 package com.wu.controller;
 
 import com.wu.bean.SignInfo;
+import com.wu.bean.SignS;
 import com.wu.bean.UserInfo;
 import com.wu.service.SignInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,11 @@ import java.util.Map;
 public class SignInfoController {
     @Autowired
     private SignInfoService signInfoService;
-    @RequestMapping( "/signIn1" )
+    @RequestMapping({"/signIn1"})
     @ResponseBody
-    public Map<String,Object> signIn1(@RequestBody SignInfo signInfo){
-        return signInfoService.genSign1(signInfo.getUserID(),signInfo.getUserName());
+    public Map<String, Object> signIn1( String signInfos)
+    {
+        return this.signInfoService.genSign1(signInfos);
     }
     @RequestMapping( "/signIn2" )
     @ResponseBody

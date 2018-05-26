@@ -34,6 +34,7 @@ public class UserInfoController {
     @RequestMapping( "/getUserList" )
     @ResponseBody
     public List<UserInfo> getUserList(@RequestBody UserInfo userInfo){
+        System.out.println(userInfo);
         return userInfoService.selectAllByDevice(userInfo.getNickName(),userInfo.getAvatarUrl());
     }
     @RequestMapping( "/getCurrtPerson" )
