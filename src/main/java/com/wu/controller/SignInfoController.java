@@ -1,7 +1,5 @@
 package com.wu.controller;
 
-import com.wu.bean.SignInfo;
-import com.wu.bean.SignS;
 import com.wu.bean.UserInfo;
 import com.wu.service.SignInfoService;
 import org.springframework.beans.factory.annotation.Autowired;

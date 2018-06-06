@@ -37,9 +37,5 @@ public class UserInfoController {
         System.out.println(userInfo);
         return userInfoService.selectAllByDevice(userInfo.getNickName(),userInfo.getAvatarUrl());
     }
-    @RequestMapping( "/getCurrtPerson" )
-    @ResponseBody
-    public List<String> getCurrtPerson() throws ParseException {
-        return userInfoService.selectCurrentName();
-    }
+
 }
