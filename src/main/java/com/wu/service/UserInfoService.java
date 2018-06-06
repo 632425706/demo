@@ -131,6 +131,7 @@ public class UserInfoService {
                 return map;
             }
         }catch (Exception e){
+            logger.info(e.getMessage());
             e.fillInStackTrace();
         }
         map.put("code",1);
