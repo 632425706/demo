@@ -18,8 +18,8 @@ import java.util.List;
  */
 @Repository
 public interface UserInfoDao {
-    @Insert("insert into userinfo(name,gender,phone,birthDate,md5Code)" +
-            " values(#{name},#{gender},#{phone},#{birthDate},#{md5Code})")
+    @Insert("insert into userinfo(name,gender,phone,birthDate,md5Code,solar)" +
+            " values(#{name},#{gender},#{phone},#{birthDate},#{md5Code},#{solar})")
     public int genTask(UserInfo userInfo);
     @Select("select count(*) from userinfo where name=#{name} and phone=#{phone}")
     public int selectNameNum(@Param("name") String name, @Param("phone") String phone);
@@ -35,5 +35,10 @@ public interface UserInfoDao {
     public void upDevice(UserInfo userInfo);
     @Select("select name from userinfo where birthDate=#{birthDate1} OR birthDate=#{birthDate2}")
     public List<String> getBirthdayPerson(@Param("birthDate1") String birthDate1,@Param("birthDate2") String birthDate2);
-
+    @Select("select name from userinfo where signTime LIKE '${signTime}%' ")
+    public List<String> getSign(@Param("signTime") String signTime);
+    @Select("select count(*) from userinfo where signTime LIKE '${signTime}%' ")
+    public Long getSignCount(@Param("signTime") String signTime);
+    @Select("select count(*) from userinfo ")
+    public Long getCount();
 }
