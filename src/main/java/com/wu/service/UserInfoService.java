@@ -2,7 +2,9 @@ package com.wu.service;
 
 import com.wu.bean.DeviceInfo;
 import com.wu.bean.UserInfo;
+import com.wu.bean.UserList;
 import com.wu.dao.DeviceInfoDao;
+import com.wu.dao.SignInfoDao;
 import com.wu.dao.UserInfoDao;
 import com.wu.util.CalendarUtil;
 import com.wu.util.LunarUtil;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,7 +33,11 @@ public class UserInfoService {
     @Autowired
      private UserInfoDao userInfoDao;
     @Autowired
+    private SignInfoDao signInfoDao;
+    @Autowired
      private DeviceInfoDao deviceInfoDao;
+    @Autowired
+    private SignInfoService signInfoService;
     private String[] mouths={"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
     private String[] days={"初一","初二","初三","初四","初五","初六","初七","初八","初九","初十",
             "十一","十二","十三","十四","十五","十六","十七","十八","十九",
@@ -134,13 +141,30 @@ public class UserInfoService {
             logger.info(e.getMessage());
             e.fillInStackTrace();
         }
+
         map.put("code",1);
         map.put("message","插入失败");
         return map;
     }
-    public List<UserInfo> selectAllByDevice(String nickName,String avatarUrl){
+    public List<UserList> selectAllByDevice(String nickName, String avatarUrl){
+        List<UserList> result=new ArrayList<>();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = dateFormat.format(new Date());
+        List<String> users=signInfoDao.selectSignId(date);
         String md5Code= MD5Utils.MD5(nickName+avatarUrl);
-       return userInfoDao.selectAllByDevice(md5Code);
+        List<UserInfo> list = userInfoDao.selectAllByDevice(md5Code);
+        for (UserInfo userInfo:list){
+            UserList userList1 = new UserList();
+            userList1.setId(userInfo.getID());
+            userList1.setName(userInfo.getName());
+            if (users.contains(userInfo.getID())){
+                userList1.setCheck(1);
+            }else {
+                userList1.setCheck(0);
+            }
+            result.add(userList1);
+        }
+       return result;
     }
 
     public List<String> selectCurrentName() throws ParseException {

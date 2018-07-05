@@ -1,6 +1,7 @@
 package com.wu.controller;
 
 import com.wu.bean.UserInfo;
+import com.wu.bean.UserList;
 import com.wu.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,7 @@ public class UserInfoController {
 //    }
     @RequestMapping( "/getUserList" )
     @ResponseBody
-    public List<UserInfo> getUserList(@RequestBody UserInfo userInfo){
+    public List<UserList> getUserList(@RequestBody(required = false) UserInfo userInfo){
         System.out.println(userInfo);
         return userInfoService.selectAllByDevice(userInfo.getNickName(),userInfo.getAvatarUrl());
     }

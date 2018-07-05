@@ -23,15 +23,14 @@ public class PasswdController {
     @ResponseBody
     public Map<String, Object> checkpasswd(String xxxpwd) throws ParseException {
         Map<String,Object> map=new HashMap<>();
-//        if (xxxpwd!=null && PassData.passwd.equals(xxxpwd)){
-//            map.put("code",0);
-//            map.put("message","密码正确");
-//        }else {
-//            map.put("code",1);
-//            map.put("message","密码错误");
-//        }
-        map.put("code",0);
-        map.put("message","密码正确");
-        return map;
+        if (xxxpwd!=null && PassData.passwd.equals(xxxpwd)){
+            map.put("code",0);
+            map.put("message","密码正确");
+            return map;
+        }else {
+            map.put("code",1);
+            map.put("message","密码错误");
+            return map;
+        }
     }
 }

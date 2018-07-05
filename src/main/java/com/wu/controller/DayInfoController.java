@@ -1,6 +1,9 @@
 package com.wu.controller;
 
+import com.wu.bean.DayInfo;
 import com.wu.bean.UserInfo;
+import com.wu.dao.DayInfoDao;
+import com.wu.dao.SignInfoDao;
 import com.wu.dao.UserInfoDao;
 import com.wu.service.SignInfoService;
 import com.wu.service.UserInfoService;
@@ -30,6 +33,10 @@ public class DayInfoController {
     private UserInfoService userInfoService;
     @Autowired
     private UserInfoDao userInfoDao;
+    @Autowired
+    private DayInfoDao dayInfoDao;
+    @Autowired
+    private SignInfoService signInfoService;
 
     @RequestMapping( "/getCurrtPerson" )
     @ResponseBody
@@ -45,10 +52,49 @@ public class DayInfoController {
         String imageupdatename = sdf.format(date);
         List<String> ListName=userInfoDao.getSign(imageupdatename);
         Long CountNum=userInfoDao.getSignCount(imageupdatename);
-        Long totalCount = userInfoDao.getCount();
+        List<String> signnames = signInfoService.getCurrtName();
         map.put("todayPerson",ListName);
         map.put("todayNum",CountNum);
-        map.put("totalCount",totalCount);
+        map.put("totalCount",signnames.size());
         return map;
+    }
+
+
+
+    @RequestMapping( "/dailyLog" )
+    @ResponseBody
+    public Map<String,Object> insertdayinfo(@RequestBody DayInfo dayInfo){
+        Map<String,Object> map=new HashMap<>();
+        map.put("code",0);
+        map.put("message","插入成功");
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String datename = sdf.format(date);
+        int numm = signInfoService.getCurrtName().size();
+        dayInfo.setTotalcheckin(numm);
+        String personstr = dayInfo.getSignnamelist().replaceFirst(".*:", "");
+        dayInfo.setSignnamelist(personstr);
+        try{
+            int num = dayInfoDao.selectDayInfoNum(datename);
+            if (num==0) {
+                dayInfo.setDay(datename);
+                dayInfoDao.genDayInfo(dayInfo);
+            }else if (num==1){
+                dayInfoDao.Updatedayinfo(dayInfo);
+            }
+        }catch (Exception e){
+            map.put("code",1);
+            map.put("message","插入或更新失败");
+        }
+        return map;
+    }
+    @RequestMapping( "/getDayInfo" )
+    @ResponseBody
+    public DayInfo getDayInfo() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String datename = sdf.format(date);
+        DayInfo info = dayInfoDao.selectDayInfo(datename);
+        return info;
     }
 }

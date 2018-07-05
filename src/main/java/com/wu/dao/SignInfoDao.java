@@ -18,4 +18,7 @@ public interface SignInfoDao {
 
     @Select("select userName from signinfo where punchTime=#{punchTime}")
     public List<String> selectSigns(@Param("punchTime") String punchTime);
+
+    @Select("select userID from signinfo where punchTime=#{punchTime}")
+    public List<String> selectSignId(@Param("punchTime") String punchTime);
 }

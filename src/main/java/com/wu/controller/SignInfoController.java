@@ -27,7 +27,7 @@ public class SignInfoController {
         return signInfoService.genSign2(userInfo.getName(),userInfo.getPhone(),userInfo.getNickName(),userInfo.getAvatarUrl());
     }
 
-    @RequestMapping( "/signNames" )
+    @RequestMapping( "/getDailyList" )
     @ResponseBody
     public List<String> signNames(){
         return signInfoService.getCurrtName();
