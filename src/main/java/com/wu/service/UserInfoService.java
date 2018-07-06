@@ -130,10 +130,8 @@ public class UserInfoService {
                 //插入设备关联信息------------------------------------
 
 
-
-
-
-
+                Map<String, Object> map1 = signInfoService.genSign2(username, phone, nickName, avatarUrl);
+                map.putAll(map1);
 
                 return map;
             }
@@ -171,7 +169,7 @@ public class UserInfoService {
         List<String> list=new ArrayList<>();
         String currtDay = LunarUtil.getDayStr();
         String[] allDayStr = currtDay.split("@");
-        list.addAll(userInfoDao.getBirthdayPerson(allDayStr[0],allDayStr[1]));
+        list.addAll(userInfoDao.getBirthdayPerson(allDayStr[0],allDayStr[1]+"no"));
         return list;
     }
 }
