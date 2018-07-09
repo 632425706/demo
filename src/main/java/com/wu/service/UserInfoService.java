@@ -169,7 +169,7 @@ public class UserInfoService {
         List<String> list=new ArrayList<>();
         String currtDay = LunarUtil.getDayStr();
         String[] allDayStr = currtDay.split("@");
-        list.addAll(userInfoDao.getBirthdayPerson(allDayStr[0],allDayStr[1]+"no"));
+        list.addAll(userInfoDao.getBirthdayPerson(allDayStr[0]));
         return list;
     }
 }
