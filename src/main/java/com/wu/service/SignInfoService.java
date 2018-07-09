@@ -68,15 +68,15 @@ public class SignInfoService {
         try {
             nowTime = new SimpleDateFormat(format).parse(now);
             Date startTime = new SimpleDateFormat(format).parse("05:00:00");
-            Date endTime = new SimpleDateFormat(format).parse("8:00:00");
+            Date endTime = new SimpleDateFormat(format).parse("9:00:00");
             if (isEffectiveDate(nowTime, startTime, endTime)) {
                 runFlag = true;
-                logger.info("系统时间在早上5点到下午8点之间.");
-                map.put("message", "系统时间在早上5点到下午8点之间.");
+                logger.info("系统时间在早上5点到上午9点之间.");
+                map.put("message", "系统时间在早上5点到上午9点之间.");
             } else {
                 runFlag = false;
-                logger.info("系统时间不在早上5点到下午8点之间.");
-                map.put("message", "系统时间不在早上5点到下午8点之间.");
+                logger.info("系统时间不在早上5点到上午9点之间.");
+                map.put("message", "系统时间不在早上5点到上午9点之间.");
             }
         } catch (java.text.ParseException e) {
         // TODO Auto-generated catch block
@@ -164,15 +164,15 @@ public class SignInfoService {
         try {
             nowTime = new SimpleDateFormat(format).parse(now);
             Date startTime = new SimpleDateFormat(format).parse("05:00:00");
-            Date endTime = new SimpleDateFormat(format).parse("8:00:00");
+            Date endTime = new SimpleDateFormat(format).parse("9:00:00");
             if (isEffectiveDate(nowTime, startTime, endTime)) {
                 runFlag = true;
-                logger.info("系统时间在早上5点到下午8点之间.");
-                map.put("SignMessage", "系统时间在早上5点到下午8点之间.");
+                logger.info("系统时间在早上5点到上午9点之间.");
+                map.put("SignMessage", "系统时间在早上5点到上午9点之间.");
             } else {
                 runFlag = false;
-                logger.info("系统时间不在早上5点到下午8点之间.");
-                map.put("SignMessage", "系统时间不在早上5点到下午8点之间.");
+                logger.info("系统时间不在早上5点到上午9点之间.");
+                map.put("SignMessage", "系统时间不在早上5点到上午9点之间.");
             }
         } catch (java.text.ParseException e) {
             // TODO Auto-generated catch block
