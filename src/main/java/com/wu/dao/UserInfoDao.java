@@ -41,4 +41,6 @@ public interface UserInfoDao {
     public Long getSignCount(@Param("signTime") String signTime);
     @Select("select count(*) from userinfo ")
     public Long getCount();
+    @Select("SELECT `name` FROM `userinfo` where date_format(signTime,'%y-%m-%d') = date_format(now(),'%y-%m-%d')")
+    public List<String> getNewPerson();
 }

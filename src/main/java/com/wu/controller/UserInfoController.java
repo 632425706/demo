@@ -39,4 +39,10 @@ public class UserInfoController {
         return userInfoService.selectAllByDevice(userInfo.getNickName(),userInfo.getAvatarUrl());
     }
 
+    @RequestMapping( "/getNesPerson" )
+    @ResponseBody
+    public List<String> getNesPerson() throws ParseException {
+        return userInfoService.selectNewPerson();
+    }
+
 }

@@ -172,4 +172,10 @@ public class UserInfoService {
         list.addAll(userInfoDao.getBirthdayPerson(allDayStr[0]));
         return list;
     }
+
+    public List<String> selectNewPerson() throws ParseException {
+        List<String> list=new ArrayList<>();
+        list=userInfoDao.getNewPerson();
+        return list;
+    }
 }
