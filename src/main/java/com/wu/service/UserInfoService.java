@@ -173,8 +173,8 @@ public class UserInfoService {
         return list;
     }
 
-    public List<String> selectNewPerson() throws ParseException {
-        List<String> list=new ArrayList<>();
+    public List<UserInfo> selectNewPerson() throws ParseException {
+        List<UserInfo> list=new ArrayList<>();
         list=userInfoDao.getNewPerson();
         return list;
     }

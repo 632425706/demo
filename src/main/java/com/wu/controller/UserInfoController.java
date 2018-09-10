@@ -41,7 +41,7 @@ public class UserInfoController {
 
     @RequestMapping( "/getNesPerson" )
     @ResponseBody
-    public List<String> getNesPerson() throws ParseException {
+    public List<UserInfo> getNesPerson() throws ParseException {
         return userInfoService.selectNewPerson();
     }
 
