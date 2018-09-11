@@ -7,6 +7,7 @@ import com.wu.dao.DeviceInfoDao;
 import com.wu.dao.SignInfoDao;
 import com.wu.dao.UserInfoDao;
 import com.wu.util.CalendarUtil;
+import com.wu.util.ChangeNumToChinese;
 import com.wu.util.LunarUtil;
 import com.wu.util.MD5Utils;
 import org.slf4j.Logger;
@@ -74,7 +75,7 @@ public class UserInfoService {
 //            1是农历  0是阳历
            try{
                if (calendar.equals("1")){
-                   String[] dayStrs = dateValue.split("@");
+                   String[] dayStrs = dateValue.split("-");
                    int mouthNum=Integer.parseInt(dayStrs[0]);
                    String mouthStr="";
                    if (mouthNum<10){
@@ -97,13 +98,14 @@ public class UserInfoService {
                    SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");
                    SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM-dd");
                    solar=dateFormat2.format(dateFormat1.parse(dayStr));
-                   birthday=mouths[mouthNum-1]+"月"+days[dayNum-1];
+                   birthday= ChangeNumToChinese.toChinese(year+"")+"年"+mouths[mouthNum-1]+"月"+days[dayNum-1];
                    userInfo.setSolar(solar);
                }else {
-                   String[] dayStrs = dateValue.split("@");
-                   int mouthNum=Integer.parseInt(dayStrs[0]);
-                   int dayNum=Integer.parseInt(dayStrs[1]);
-                   birthday=(mouthNum)+"-"+(dayNum);
+                   String[] dayStrs = dateValue.split("-");
+                   int year=Integer.parseInt(dayStrs[0]);
+                   int mouthNum=Integer.parseInt(dayStrs[1]);
+                   int dayNum=Integer.parseInt(dayStrs[2]);
+                   birthday=(year)+"-"+(mouthNum)+"-"+(dayNum);
                    userInfo.setSolar(birthday);
                }
            }catch (Exception e){
