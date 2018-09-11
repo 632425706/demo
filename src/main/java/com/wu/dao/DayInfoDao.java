@@ -18,7 +18,7 @@ public interface DayInfoDao {
 
     @Update("update dayinfo set dailyLeader=#{dailyLeader},cooker=#{cooker},checker=#{checker},forwarder=#{forwarder},totalcups=#{totalcups},photographer=#{photographer},dailylog=#{dailylog}" +
             ",propaganda=#{propaganda},summingup=#{summingup},logistics=#{logistics},cleaner=#{cleaner},environment=#{environment}," +
-            "newpersonslist=#{newpersonslist},totalcheckin=#{totalcheckin},signnamelist=#{signnamelist}")
+            "newpersonslist=#{newpersonslist},totalcheckin=#{totalcheckin},signnamelist=#{signnamelist}  where `day`= DATE_FORMAT(NOW(),'%Y-%m-%h')")
     public void Updatedayinfo(DayInfo dayInfo);
 
     @Select("select count(*) from dayinfo where  day=#{day}")
