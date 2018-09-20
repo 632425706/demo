@@ -76,14 +76,14 @@ public class UserInfoService {
            try{
                if (calendar.equals("1")){
                    String[] dayStrs = dateValue.split("-");
-                   int mouthNum=Integer.parseInt(dayStrs[0]);
+                   int mouthNum=Integer.parseInt(dayStrs[1]);
                    String mouthStr="";
                    if (mouthNum<10){
                        mouthStr="0"+mouthNum;
                    }else {
                        mouthStr=""+mouthNum;
                    }
-                   int dayNum=Integer.parseInt(dayStrs[1]);
+                   int dayNum=Integer.parseInt(dayStrs[2]);
                    String dayStrr="";
                    if (dayNum<10){
                        dayStrr="0"+dayNum;
@@ -106,7 +106,7 @@ public class UserInfoService {
                    int mouthNum=Integer.parseInt(dayStrs[1]);
                    int dayNum=Integer.parseInt(dayStrs[2]);
                    birthday=(year)+"-"+(mouthNum)+"-"+(dayNum);
-                   userInfo.setSolar(birthday);
+                   userInfo.setSolar((mouthNum)+"-"+(dayNum));
                }
            }catch (Exception e){
                logger.info("获得日期失败"+dateValue+" "+calendar);
