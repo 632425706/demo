@@ -29,7 +29,7 @@ public interface UserInfoDao {
     public List<UserInfo> selectAllByDevice(@Param("md5Code") String md5Code);
     @Select("select * from userinfo where name=#{name} and phone=#{phone}")
     public UserInfo getPerson(@Param("name") String name, @Param("phone") String phone);
-    @Update("update userinfo set gender=#{gender},birthDate=#{birthDate} where name=#{name} and phone=#{phone}")
+    @Update("update userinfo set gender=#{gender},birthDate=#{birthDate},solar=#{solar} where name=#{name} and phone=#{phone}")
     public void updateInfo(UserInfo userInfo);
     @Update("update userinfo set md5Code=#{md5Code} where name=#{name} and phone=#{phone}")
     public void upDevice(UserInfo userInfo);
