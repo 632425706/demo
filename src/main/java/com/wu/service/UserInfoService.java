@@ -90,8 +90,9 @@ public class UserInfoService {
                    }else {
                        dayStrr=""+dayNum;
                    }
-                   Calendar a=Calendar.getInstance();
-                   int year=a.get(Calendar.YEAR);
+//                   Calendar a=Calendar.getInstance();
+//                   int year=a.get(Calendar.YEAR);
+                   int year=Integer.parseInt(dayStrs[0]);
                    Boolean isRunNain=false;
                    if(year%4==0&&year%100!=0||year%400==0) isRunNain=true;
                    String dayStr=CalendarUtil.lunarToSolar(year+mouthStr+dayStrr,isRunNain);
