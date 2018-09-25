@@ -107,7 +107,7 @@ public class UserInfoService {
                    int mouthNum=Integer.parseInt(dayStrs[1]);
                    int dayNum=Integer.parseInt(dayStrs[2]);
                    birthday=(year)+"-"+(mouthNum)+"-"+(dayNum);
-                   userInfo.setSolar((mouthNum)+"-"+(dayNum));
+                   userInfo.setSolar((year)+"-"+(mouthNum)+"-"+(dayNum));
                }
            }catch (Exception e){
                logger.info("获得日期失败"+dateValue+" "+calendar);
