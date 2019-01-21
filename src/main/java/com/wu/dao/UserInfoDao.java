@@ -33,7 +33,7 @@ public interface UserInfoDao {
     public void updateInfo(UserInfo userInfo);
     @Update("update userinfo set md5Code=#{md5Code} where name=#{name} and phone=#{phone}")
     public void upDevice(UserInfo userInfo);
-    @Select("select name from userinfo where solar=#{birthDate1}")
+    @Select("select name from userinfo where birthDate like #{birthDate1}")
     public List<String> getBirthdayPerson(@Param("birthDate1") String birthDate1);
     @Select("select name from userinfo where signTime LIKE '${signTime}%' ")
     public List<String> getSign(@Param("signTime") String signTime);

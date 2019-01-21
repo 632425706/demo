@@ -103,11 +103,30 @@ public class UserInfoService {
                    userInfo.setSolar(solar);
                }else {
                    String[] dayStrs = dateValue.split("-");
-                   int year=Integer.parseInt(dayStrs[0]);
+
                    int mouthNum=Integer.parseInt(dayStrs[1]);
+                   String mouthStr="";
+                   if (mouthNum<10){
+                       mouthStr="0"+mouthNum;
+                   }else {
+                       mouthStr=""+mouthNum;
+                   }
                    int dayNum=Integer.parseInt(dayStrs[2]);
-                   birthday=(year)+"-"+(mouthNum)+"-"+(dayNum);
-                   userInfo.setSolar((year)+"-"+(mouthNum)+"-"+(dayNum));
+                   String dayStrr="";
+                   if (dayNum<10){
+                       dayStrr="0"+dayNum;
+                   }else {
+                       dayStrr=""+dayNum;
+                   }
+                   int year=Integer.parseInt(dayStrs[0]);
+                   String dayStr = year + mouthStr + dayStrr;
+                   SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");
+                   SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM-dd");
+                   solar=dateFormat2.format(dateFormat1.parse(dayStr));
+
+                   birthday=(year)+"-"+(mouthStr)+"-"+(dayStrr);
+
+                   userInfo.setSolar(solar);
                }
            }catch (Exception e){
                logger.info("获得日期失败"+dateValue+" "+calendar);
@@ -116,27 +135,29 @@ public class UserInfoService {
 
 //            ----------------------------------------------
             userInfo.setBirthDate(birthday);
-            int num = userInfoDao.selectNameNum(username, phone);
-            if (num>1){
-                map.put("code",1);
-                map.put("message",username+"信息存在多份明显有误，联系管理员删除");
-                return map;
-            }else if(num==1){
-                userInfoDao.updateInfo(userInfo);
-                map.put("code",0);
-                map.put("message",username+"信息更新成功");
-                return map;
-            }else {
-                userInfoDao.genTask(userInfo);
-                map.put("code",0);
-                map.put("message",username+"添加信息成功");
-                //插入设备关联信息------------------------------------
+            synchronized (userInfoDao){
+                int num = userInfoDao.selectNameNum(username, phone);
+                if (num>1){
+                    map.put("code",1);
+                    map.put("message",username+"信息存在多份明显有误，联系管理员删除");
+                    return map;
+                }else if(num==1){
+                    userInfoDao.updateInfo(userInfo);
+                    map.put("code",0);
+                    map.put("message",username+"信息更新成功");
+                    return map;
+                }else {
+                    userInfoDao.genTask(userInfo);
+                    map.put("code",0);
+                    map.put("message",username+"添加信息成功");
+                    //插入设备关联信息------------------------------------
 
 
-                Map<String, Object> map1 = signInfoService.genSign2(username, phone, nickName, avatarUrl);
-                map.putAll(map1);
+                    Map<String, Object> map1 = signInfoService.genSign2(username, phone, nickName, avatarUrl);
+                    map.putAll(map1);
 
-                return map;
+                    return map;
+                }
             }
         }catch (Exception e){
             logger.info(e.getMessage());
@@ -172,7 +193,29 @@ public class UserInfoService {
         List<String> list=new ArrayList<>();
         String currtDay = LunarUtil.getDayStr();
         String[] allDayStr = currtDay.split("@");
-        list.addAll(userInfoDao.getBirthdayPerson(allDayStr[0]));
+
+        String[] dayStrs = allDayStr[0].split("-");
+        int mouthNum=Integer.parseInt(dayStrs[0]);
+        String mouthStr="";
+        if (mouthNum<10){
+            mouthStr="0"+mouthNum;
+        }else {
+            mouthStr=""+mouthNum;
+        }
+        int dayNum=Integer.parseInt(dayStrs[1]);
+        String dayStrr="";
+        if (dayNum<10){
+            dayStrr="0"+dayNum;
+        }else {
+            dayStrr=""+dayNum;
+        }
+        String ylStr1 = mouthStr+"-"+dayStrr;
+        String ylStr2 = mouthNum+"-"+dayNum;
+
+        list.addAll(userInfoDao.getBirthdayPerson("%"+ylStr1));
+        list.addAll(userInfoDao.getBirthdayPerson(ylStr2));
+        list.addAll(userInfoDao.getBirthdayPerson("%-"+ylStr2));
+        list.addAll(userInfoDao.getBirthdayPerson("%"+allDayStr[1]));
         return list;
     }
 
