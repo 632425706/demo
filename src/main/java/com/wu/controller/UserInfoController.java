@@ -2,6 +2,8 @@ package com.wu.controller;
 
 import com.wu.bean.UserInfo;
 import com.wu.bean.UserList;
+import com.wu.dao.DeviceInfoDao;
+import com.wu.dao.UserInfoDao;
 import com.wu.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +29,13 @@ public class UserInfoController {
     @RequestMapping( "/genUser" )
     @ResponseBody
     public Map<String, Object> genUser(@RequestBody UserInfo userInfo){
-        return userInfoService.insertOne(userInfo.getName(),userInfo.getGender(),userInfo.getPhone(),userInfo.getBirthDate(),userInfo.getCalendar(),userInfo.getNickName(),userInfo.getAvatarUrl());
+        return userInfoService.insertOne(userInfo.getOpenid(),userInfo.getName(),userInfo.getGender(),userInfo.getPhone(),userInfo.getBirthDate(),userInfo.getCalendar(),userInfo.getNickName(),userInfo.getAvatarUrl(),userInfo.getXzCode());
+    }
+
+    @RequestMapping("/syncinfo")
+    @ResponseBody
+    public Map<String,Object> syncOpenId(String openid,String nickname,String avatarurl){
+       return userInfoService.syncInfo(openid,nickname,avatarurl);
     }
 //    public Map<String, Object> genUser(String name,String gender,String phone,String birthday,String calender,String nickName,String avatarUrl){
 //        return userInfoService.insertOne(name,gender,phone,birthday,calender,nickName,avatarUrl);
@@ -36,13 +44,13 @@ public class UserInfoController {
     @ResponseBody
     public List<UserList> getUserList(@RequestBody(required = false) UserInfo userInfo){
         System.out.println(userInfo);
-        return userInfoService.selectAllByDevice(userInfo.getNickName(),userInfo.getAvatarUrl());
+        return userInfoService.selectAllByDevice(userInfo.getOpenid(),userInfo.getNickName(),userInfo.getAvatarUrl());
     }
 
     @RequestMapping( "/getNesPerson" )
     @ResponseBody
-    public List<UserInfo> getNesPerson() throws ParseException {
-        return userInfoService.selectNewPerson();
+    public List<UserInfo> getNesPerson(int xzCode) throws ParseException {
+        return userInfoService.selectNewPerson(xzCode);
     }
 
 }

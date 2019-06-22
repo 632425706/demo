@@ -10,14 +10,14 @@ import java.util.List;
 
 @Repository
 public interface SignInfoDao {
-    @Insert("insert into signinfo(userID,userName,punchTime)" +
-            " values(#{userID},#{userName},#{punchTime})")
+    @Insert("insert into signinfo(userID,userName,punchTime,xzCode)" +
+            " values(#{userID},#{userName},#{punchTime},#{xzCode})")
     public int genSign(SignInfo signInfo);
     @Select("select count(*) from signinfo where userID=#{userID} and punchTime=#{punchTime}")
     public int selectSignNum(@Param("userID") String userID, @Param("punchTime") String punchTime);
 
-    @Select("select userName from signinfo where punchTime=#{punchTime}")
-    public List<String> selectSigns(@Param("punchTime") String punchTime);
+    @Select("select userName from signinfo where punchTime=#{punchTime} and xzCode=#{xzCode}")
+    public List<String> selectSigns(@Param("punchTime") String punchTime,@Param("xzCode") int xzCode);
 
     @Select("select userID from signinfo where punchTime=#{punchTime}")
     public List<String> selectSignId(@Param("punchTime") String punchTime);

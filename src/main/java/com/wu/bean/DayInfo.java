@@ -11,6 +11,7 @@ import lombok.Data;
  */
 @Data
 public class DayInfo {
+    private String openid;
     private String dailyLeader;
     private String cooker;
     private String checker;
@@ -27,4 +28,5 @@ public class DayInfo {
     private String day;
     private String newpersonslist;
     private String signnamelist;
+    private int xzCode;
 }

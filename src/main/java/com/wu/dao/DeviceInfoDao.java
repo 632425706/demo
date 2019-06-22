@@ -19,10 +19,18 @@ import java.util.List;
  */
 @Repository
 public interface DeviceInfoDao {
-    @Insert("insert into deviceinfo(md5Code,grade,nickName,avatarUrl) values(#{md5Code},#{grade},#{nickName},#{avatarUrl})")
+    @Insert("insert into deviceinfo(openid,md5Code,grade,nickName,avatarUrl) values(#{md5Code},#{grade},#{nickName},#{avatarUrl},#{openid})")
     public int genDeviceRelation(DeviceInfo deviceInfo);
+    @Update("update deviceinfo set ownStatus = #{ownstatus} where openid=#{openid}")
+    public void updateOwnStatus(@Param("openid") String openid,@Param("ownstatus") int ownstatus);
     @Select("select count(*) from deviceinfo where md5Code=#{md5Code} ")
     public int selectRelationNum(@Param("md5Code") String md5Code);
+    @Select("select count(*) from deviceinfo where openid=#{openid} ")
+    public int selectRelationNum2(@Param("openid") String openid);
     @Select("select * from deviceinfo ")
     public List<DeviceInfo> selectAll();
+    @Select("select ownstatus from deviceinfo where openid=#{openid}")
+    public int selectOwnStatus(@Param("openid")String openid);
+    @Select("update deviceinfo set openid=#{openid} where md5Code=#{md5Code}")
+    public int updateOpenId(@Param("openid")String openid,@Param("md5Code") String md5Code);
 }

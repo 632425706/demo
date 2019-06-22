@@ -15,6 +15,7 @@ import lombok.Setter;
 @Data
 public class UserInfo {
         private String ID;
+        private String openid;
         private String name;
         private String gender;
         private String phone;
@@ -24,4 +25,5 @@ public class UserInfo {
         private String nickName;
         private String avatarUrl;
         private String solar;
+        private int xzCode;
 }

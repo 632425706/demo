@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class DeviceInfo {
     private Long ID;
+    private String openid;
     private String md5Code;
     private String grade;
     private String nickName;

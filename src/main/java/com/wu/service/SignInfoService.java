@@ -29,7 +29,7 @@ public class SignInfoService {
     private UserInfoDao userInfoDao;
     @Autowired
     private DeviceInfoDao deviceInfoDao;
-    public Map<String,Object> genSign1(String id,String name){
+    public Map<String,Object> genSign1(String id,String name,int xzCode){
         Map<String,Object> map=new HashMap<>();
         int ids = userInfoDao.selectID(id);
         if (ids==0){
@@ -45,6 +45,7 @@ public class SignInfoService {
                 signInfo.setUserID(id);
                 signInfo.setPunchTime(date);
                 signInfo.setUserName(name);
+                signInfo.setXzCode(xzCode);
                 signInfoDao.genSign(signInfo);
                 map.put("code",0);
                 map.put("message", "签到成功");
@@ -56,7 +57,7 @@ public class SignInfoService {
             }
         }
     }
-    public Map<String, Object> genSign1(String signInfos)
+    public Map<String, Object> genSign1(String signInfos , int xzCode)
     {
         Map<String, Object> map = new HashMap();
         //判断时间区间
@@ -134,6 +135,7 @@ public class SignInfoService {
                     signInfo1.setUserID(id);
                     signInfo1.setPunchTime(date);
                     signInfo1.setUserName(name);
+                    signInfo1.setXzCode(xzCode);
                     this.signInfoDao.genSign(signInfo1);
                     success.add(name);
                 }
@@ -149,7 +151,7 @@ public class SignInfoService {
         map.put("code", Integer.valueOf(0));
         return map;
     }
-    public Map<String,Object> genSign2(String name,String phone,String nickName,String avatarUrl){
+    public Map<String,Object> genSign2(String openid,String name,String phone,String nickName,String avatarUrl,int xzCode){
         Map<String, Object> map=new HashMap<>();
 
 
@@ -192,6 +194,7 @@ public class SignInfoService {
             map.put("SignMessage","没有该用户");
             return map;
         }
+        theOne.setOpenid(openid);
         theOne.setMd5Code(md5Code);
         userInfoDao.upDevice(theOne);
         int hasDevice = deviceInfoDao.selectRelationNum(md5Code);
@@ -203,14 +206,14 @@ public class SignInfoService {
             deviceInfo.setAvatarUrl(avatarUrl);
             deviceInfoDao.genDeviceRelation(deviceInfo);
         }
-        map= genSign1(theOne.getID(),theOne.getName());
+        map= genSign1(theOne.getID(),theOne.getName(),xzCode);
         return map;
     }
 
-    public List<String> getCurrtName(){
+    public List<String> getCurrtName(int xzCode){
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = dateFormat.format(new Date());
-        return signInfoDao.selectSigns(date);
+        return signInfoDao.selectSigns(date,xzCode);
     }
 
     /**

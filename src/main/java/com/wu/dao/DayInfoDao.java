@@ -12,18 +12,18 @@ import java.util.List;
 
 @Repository
 public interface DayInfoDao {
-    @Insert("insert into dayinfo(dailyLeader,cooker,checker,forwarder,totalcups,photographer,dailylog,propaganda,summingup,logistics,cleaner,environment,day,newpersonslist,totalcheckin,signnamelist)" +
-            " values(#{dailyLeader},#{cooker},#{checker},#{forwarder},#{totalcups},#{photographer},#{dailylog},#{propaganda},#{summingup},#{logistics},#{cleaner},#{environment},#{day},#{newpersonslist},#{totalcheckin},#{signnamelist})")
+    @Insert("insert into dayinfo(dailyLeader,cooker,checker,forwarder,totalcups,photographer,dailylog,propaganda,summingup,logistics,cleaner,environment,day,newpersonslist,totalcheckin,signnamelist,xzCode)" +
+            " values(#{dailyLeader},#{cooker},#{checker},#{forwarder},#{totalcups},#{photographer},#{dailylog},#{propaganda},#{summingup},#{logistics},#{cleaner},#{environment},#{day},#{newpersonslist},#{totalcheckin},#{signnamelist},#{xzCode})")
     public int genDayInfo(DayInfo dayInfo);
 
     @Update("update dayinfo set dailyLeader=#{dailyLeader},cooker=#{cooker},checker=#{checker},forwarder=#{forwarder},totalcups=#{totalcups},photographer=#{photographer},dailylog=#{dailylog}" +
             ",propaganda=#{propaganda},summingup=#{summingup},logistics=#{logistics},cleaner=#{cleaner},environment=#{environment}," +
-            "newpersonslist=#{newpersonslist},totalcheckin=#{totalcheckin},signnamelist=#{signnamelist}  where `day`= DATE_FORMAT(NOW(),'%Y-%m-%d')")
+            "newpersonslist=#{newpersonslist},totalcheckin=#{totalcheckin},signnamelist=#{signnamelist},xzCode=#{xzCode}  where `day`= DATE_FORMAT(NOW(),'%Y-%m-%d')")
     public void Updatedayinfo(DayInfo dayInfo);
 
-    @Select("select count(*) from dayinfo where  day=#{day}")
-    public int selectDayInfoNum( @Param("day") String day);
+    @Select("select count(*) from dayinfo where  day=#{day} and xzCode = #{xzCode}")
+    public int selectDayInfoNum( @Param("day") String day ,@Param("xzCode")int xzCode);
 
-    @Select("select * from dayinfo where day=#{day} limit 0,1")
-    public DayInfo selectDayInfo(@Param("day") String day);
+    @Select("select * from dayinfo where day=#{day} and xzCode=#{xzCode} limit 0,1")
+    public DayInfo selectDayInfo(@Param("day") String day,@Param("xzCode")int xzCode);
 }

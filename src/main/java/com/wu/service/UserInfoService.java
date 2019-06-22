@@ -45,14 +45,16 @@ public class UserInfoService {
             "廿十","廿一","廿二","廿三","廿四","廿五","廿六","廿七","廿八","廿九",
             "三十"};
     @Transactional
-    public Map<String,Object> insertOne(String username, String gender, String phone, String dateValue,String calendar,String nickName,String avatarUrl){
+    public Map<String,Object> insertOne(String openId,String username, String gender, String phone, String dateValue,String calendar,String nickName,String avatarUrl,int xzCode){
         Map<String,Object> map=new HashMap<>();
         try{
-            logger.info(username+","+gender+","+phone+","+dateValue+","+calendar);
+            logger.info(openId+","+username+","+gender+","+phone+","+dateValue+","+calendar);
             String md5Code= MD5Utils.MD5(nickName+avatarUrl);
             DeviceInfo deviceInfo=new DeviceInfo();
             int hasDevice = deviceInfoDao.selectRelationNum(md5Code);
-            if (hasDevice==0){
+            int has2Device = deviceInfoDao.selectRelationNum2(openId);
+            if (hasDevice==0 && has2Device==0){
+                deviceInfo.setOpenid(openId);
                 deviceInfo.setMd5Code(md5Code);
                 deviceInfo.setGrade("1");
                 deviceInfo.setNickName(nickName);
@@ -63,6 +65,7 @@ public class UserInfoService {
             UserInfo userInfo=new UserInfo();
             userInfo.setMd5Code(md5Code);
             userInfo.setName(username);
+            userInfo.setOpenid(openId);
             if ("1".equals(gender)) {
                 userInfo.setGender("女");
             }else if ("0".equals(gender)){
@@ -153,7 +156,7 @@ public class UserInfoService {
                     //插入设备关联信息------------------------------------
 
 
-                    Map<String, Object> map1 = signInfoService.genSign2(username, phone, nickName, avatarUrl);
+                    Map<String, Object> map1 = signInfoService.genSign2(openId,username, phone, nickName, avatarUrl,xzCode);
                     map.putAll(map1);
 
                     return map;
@@ -168,13 +171,16 @@ public class UserInfoService {
         map.put("message","插入失败");
         return map;
     }
-    public List<UserList> selectAllByDevice(String nickName, String avatarUrl){
+    public List<UserList> selectAllByDevice(String openid,String nickName, String avatarUrl){
         List<UserList> result=new ArrayList<>();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = dateFormat.format(new Date());
         List<String> users=signInfoDao.selectSignId(date);
         String md5Code= MD5Utils.MD5(nickName+avatarUrl);
         List<UserInfo> list = userInfoDao.selectAllByDevice(md5Code);
+        if(list == null|| list.size() == 0) {
+            list=userInfoDao.selectAllByDevice2(openid);
+        }
         for (UserInfo userInfo:list){
             UserList userList1 = new UserList();
             userList1.setId(userInfo.getID());
@@ -189,7 +195,7 @@ public class UserInfoService {
        return result;
     }
 
-    public List<String> selectCurrentName() throws ParseException {
+    public List<String> selectCurrentName(int xzCode) throws ParseException {
         List<String> list=new ArrayList<>();
         String currtDay = LunarUtil.getDayStr();
         String[] allDayStr = currtDay.split("@");
@@ -212,16 +218,38 @@ public class UserInfoService {
         String ylStr1 = mouthStr+"-"+dayStrr;
         String ylStr2 = mouthNum+"-"+dayNum;
 
-        list.addAll(userInfoDao.getBirthdayPerson("%"+ylStr1));
-        list.addAll(userInfoDao.getBirthdayPerson(ylStr2));
-        list.addAll(userInfoDao.getBirthdayPerson("%-"+ylStr2));
-        list.addAll(userInfoDao.getBirthdayPerson("%"+allDayStr[1]));
+        list.addAll(userInfoDao.getBirthdayPerson("%"+ylStr1,xzCode));
+        list.addAll(userInfoDao.getBirthdayPerson(ylStr2,xzCode));
+        list.addAll(userInfoDao.getBirthdayPerson("%-"+ylStr2,xzCode));
+        list.addAll(userInfoDao.getBirthdayPerson("%"+allDayStr[1],xzCode));
         return list;
     }
 
-    public List<UserInfo> selectNewPerson() throws ParseException {
+    public List<UserInfo> selectNewPerson(int xzCode) throws ParseException {
         List<UserInfo> list=new ArrayList<>();
-        list=userInfoDao.getNewPerson();
+        list=userInfoDao.getNewPerson(xzCode);
         return list;
+    }
+
+    public Map<String,Object> syncInfo(String openid,String nickname,String avatarUrl){
+        Map<String,Object> res=new TreeMap<>();
+        try {
+            logger.info(openid+","+nickname+","+avatarUrl);
+            String md5Code= MD5Utils.MD5(nickname+avatarUrl);
+            int hasDevice = deviceInfoDao.selectRelationNum(md5Code);
+            if(hasDevice != 0){
+                deviceInfoDao.updateOpenId(openid,md5Code);
+                userInfoDao.updateOpenId(openid,md5Code);
+                res.put("status","200");
+                res.put("message","success");
+            }else{
+                res.put("status","400");
+                res.put("message","用户不存在");
+            }
+        }catch (Exception e){
+            res.put("status","500");
+            res.put("message","error");
+        }
+        return res;
     }
 }

@@ -8,4 +8,5 @@ public class SignInfo {
     private String userID;
     private String userName;
     private String punchTime;
+    private int xzCode;
 }
