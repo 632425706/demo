@@ -84,9 +84,10 @@ public class DayInfoController {
                 res.put("status","500");
                 res.put("message","失误重试");
             }
+        }else {
+            res.put("status", "400");
+            res.put("message", "用户无权限");
         }
-        res.put("status","400");
-        res.put("message","用户无权限");
         return res;
     }
 
