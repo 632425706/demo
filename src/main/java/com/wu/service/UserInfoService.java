@@ -138,6 +138,7 @@ public class UserInfoService {
 
 //            ----------------------------------------------
             userInfo.setBirthDate(birthday);
+            userInfo.setXzCode(xzCode);
             synchronized (userInfoDao){
                 int num = userInfoDao.selectNameNum(username, phone);
                 if (num>1){

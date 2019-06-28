@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Repository
 public interface DeviceInfoDao {
-    @Insert("insert into deviceinfo(openid,md5Code,grade,nickName,avatarUrl) values(#{md5Code},#{grade},#{nickName},#{avatarUrl},#{openid})")
+    @Insert("insert into deviceinfo(openid,md5Code,grade,nickName,avatarUrl) values(#{openid},#{md5Code},#{grade},#{nickName},#{avatarUrl})")
     public int genDeviceRelation(DeviceInfo deviceInfo);
     @Update("update deviceinfo set ownStatus = #{ownstatus} where openid=#{openid}")
     public void updateOwnStatus(@Param("openid") String openid,@Param("ownstatus") int ownstatus);
@@ -32,7 +32,7 @@ public interface DeviceInfoDao {
     @Select("select ownstatus from deviceinfo where openid=#{openid}")
     public int selectOwnStatus(@Param("openid")String openid);
     @Select("update deviceinfo set openid=#{openid} where md5Code=#{md5Code}")
-    public int updateOpenId(@Param("openid")String openid,@Param("md5Code") String md5Code);
+    public void updateOpenId(@Param("openid")String openid,@Param("md5Code") String md5Code);
     @Select("update deviceinfo set md5Code=#{md5Code},nickName=#{nickName},avatarUrl=#{avatarUrl} where openid=#{openid}")
-    public int updateMD5Code(@Param("openid")String openid,@Param("md5Code") String md5Code,@Param("nickName") String nickName, @Param("avatarUrl") String avatarUrl);
+    public void updateMD5Code(@Param("openid")String openid,@Param("md5Code") String md5Code,@Param("nickName") String nickName, @Param("avatarUrl") String avatarUrl);
 }

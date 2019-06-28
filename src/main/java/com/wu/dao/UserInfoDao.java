@@ -18,8 +18,8 @@ import java.util.List;
  */
 @Repository
 public interface UserInfoDao {
-    @Insert("insert into userinfo(name,gender,phone,birthDate,md5Code,solar)" +
-            " values(#{name},#{gender},#{phone},#{birthDate},#{md5Code},#{solar})")
+    @Insert("insert into userinfo(name,gender,phone,birthDate,md5Code,solar,xzCode)" +
+            " values(#{name},#{gender},#{phone},#{birthDate},#{md5Code},#{solar},#{xzCode})")
     public int genTask(UserInfo userInfo);
     @Select("select count(*) from userinfo where name=#{name} and phone=#{phone}")
     public int selectNameNum(@Param("name") String name, @Param("phone") String phone);
@@ -31,7 +31,7 @@ public interface UserInfoDao {
     public List<UserInfo> selectAllByDevice2(@Param("openid") String openid);
     @Select("select * from userinfo where name=#{name} and phone=#{phone}")
     public UserInfo getPerson(@Param("name") String name, @Param("phone") String phone);
-    @Update("update userinfo set gender=#{gender},birthDate=#{birthDate},solar=#{solar} where name=#{name} and phone=#{phone}")
+    @Update("update userinfo set gender=#{gender},birthDate=#{birthDate},solar=#{solar},xzCode=#{xzCode} where name=#{name} and phone=#{phone}")
     public void updateInfo(UserInfo userInfo);
     @Update("update userinfo set md5Code=#{md5Code} where name=#{name} and phone=#{phone}")
     public void upDevice(UserInfo userInfo);
@@ -46,7 +46,7 @@ public interface UserInfoDao {
     @Select("SELECT * FROM `userinfo` where date_format(signTime,'%y-%m-%d') = date_format(now(),'%y-%m-%d') and xzCode = #{xzCode}")
     public List<UserInfo> getNewPerson(@Param("xzCode") int xzCode);
     @Select("update userinfo set openid=#{openid} where md5Code=#{md5Code}")
-    public int updateOpenId(@Param("openid")String openid,@Param("md5Code") String md5Code);
+    public void updateOpenId(@Param("openid")String openid,@Param("md5Code") String md5Code);
     @Select("update userinfo set md5Code=#{md5Code} where openid=#{openid}")
-    public int updateMD5Code(@Param("openid")String openid,@Param("md5Code") String md5Code);
+    public void updateMD5Code(@Param("openid")String openid,@Param("md5Code") String md5Code);
 }
