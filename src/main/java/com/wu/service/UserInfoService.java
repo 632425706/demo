@@ -32,11 +32,11 @@ import java.util.*;
 public class UserInfoService {
     Logger logger= LoggerFactory.getLogger(UserInfoService.class);
     @Autowired
-     private UserInfoDao userInfoDao;
+    private UserInfoDao userInfoDao;
     @Autowired
     private SignInfoDao signInfoDao;
     @Autowired
-     private DeviceInfoDao deviceInfoDao;
+    private DeviceInfoDao deviceInfoDao;
     @Autowired
     private SignInfoService signInfoService;
     private String[] mouths={"一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"};
@@ -76,64 +76,64 @@ public class UserInfoService {
             String solar="";
 //            ----------------------------------------------
 //            1是农历  0是阳历
-           try{
-               if (calendar.equals("1")){
-                   String[] dayStrs = dateValue.split("-");
-                   int mouthNum=Integer.parseInt(dayStrs[1]);
-                   String mouthStr="";
-                   if (mouthNum<10){
-                       mouthStr="0"+mouthNum;
-                   }else {
-                       mouthStr=""+mouthNum;
-                   }
-                   int dayNum=Integer.parseInt(dayStrs[2]);
-                   String dayStrr="";
-                   if (dayNum<10){
-                       dayStrr="0"+dayNum;
-                   }else {
-                       dayStrr=""+dayNum;
-                   }
+            try{
+                if (calendar.equals("1")){
+                    String[] dayStrs = dateValue.split("-");
+                    int mouthNum=Integer.parseInt(dayStrs[1]);
+                    String mouthStr="";
+                    if (mouthNum<10){
+                        mouthStr="0"+mouthNum;
+                    }else {
+                        mouthStr=""+mouthNum;
+                    }
+                    int dayNum=Integer.parseInt(dayStrs[2]);
+                    String dayStrr="";
+                    if (dayNum<10){
+                        dayStrr="0"+dayNum;
+                    }else {
+                        dayStrr=""+dayNum;
+                    }
 //                   Calendar a=Calendar.getInstance();
 //                   int year=a.get(Calendar.YEAR);
-                   int year=Integer.parseInt(dayStrs[0]);
-                   Boolean isRunNain=false;
-                   if(year%4==0&&year%100!=0||year%400==0) isRunNain=true;
-                   String dayStr=CalendarUtil.lunarToSolar(year+mouthStr+dayStrr,isRunNain);
-                   SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");
-                   SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM-dd");
-                   solar=dateFormat2.format(dateFormat1.parse(dayStr));
-                   birthday= ChangeNumToChinese.toChinese(year+"")+"年"+mouths[mouthNum-1]+"月"+days[dayNum-1];
-                   userInfo.setSolar(solar);
-               }else {
-                   String[] dayStrs = dateValue.split("-");
+                    int year=Integer.parseInt(dayStrs[0]);
+                    Boolean isRunNain=false;
+                    if(year%4==0&&year%100!=0||year%400==0) isRunNain=true;
+                    String dayStr=CalendarUtil.lunarToSolar(year+mouthStr+dayStrr,isRunNain);
+                    SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");
+                    SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM-dd");
+                    solar=dateFormat2.format(dateFormat1.parse(dayStr));
+                    birthday= ChangeNumToChinese.toChinese(year+"")+"年"+mouths[mouthNum-1]+"月"+days[dayNum-1];
+                    userInfo.setSolar(solar);
+                }else {
+                    String[] dayStrs = dateValue.split("-");
 
-                   int mouthNum=Integer.parseInt(dayStrs[1]);
-                   String mouthStr="";
-                   if (mouthNum<10){
-                       mouthStr="0"+mouthNum;
-                   }else {
-                       mouthStr=""+mouthNum;
-                   }
-                   int dayNum=Integer.parseInt(dayStrs[2]);
-                   String dayStrr="";
-                   if (dayNum<10){
-                       dayStrr="0"+dayNum;
-                   }else {
-                       dayStrr=""+dayNum;
-                   }
-                   int year=Integer.parseInt(dayStrs[0]);
-                   String dayStr = year + mouthStr + dayStrr;
-                   SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");
-                   SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM-dd");
-                   solar=dateFormat2.format(dateFormat1.parse(dayStr));
+                    int mouthNum=Integer.parseInt(dayStrs[1]);
+                    String mouthStr="";
+                    if (mouthNum<10){
+                        mouthStr="0"+mouthNum;
+                    }else {
+                        mouthStr=""+mouthNum;
+                    }
+                    int dayNum=Integer.parseInt(dayStrs[2]);
+                    String dayStrr="";
+                    if (dayNum<10){
+                        dayStrr="0"+dayNum;
+                    }else {
+                        dayStrr=""+dayNum;
+                    }
+                    int year=Integer.parseInt(dayStrs[0]);
+                    String dayStr = year + mouthStr + dayStrr;
+                    SimpleDateFormat dateFormat1 = new SimpleDateFormat("yyyyMMdd");
+                    SimpleDateFormat dateFormat2 = new SimpleDateFormat("MM-dd");
+                    solar=dateFormat2.format(dateFormat1.parse(dayStr));
 
-                   birthday=(year)+"-"+(mouthStr)+"-"+(dayStrr);
+                    birthday=(year)+"-"+(mouthStr)+"-"+(dayStrr);
 
-                   userInfo.setSolar(solar);
-               }
-           }catch (Exception e){
-               logger.info("获得日期失败"+dateValue+" "+calendar);
-           }
+                    userInfo.setSolar(solar);
+                }
+            }catch (Exception e){
+                logger.info("获得日期失败"+dateValue+" "+calendar);
+            }
 
 
 //            ----------------------------------------------
@@ -192,7 +192,7 @@ public class UserInfoService {
             }
             result.add(userList1);
         }
-       return result;
+        return result;
     }
 
     public List<String> selectCurrentName(int xzCode) throws ParseException {
@@ -245,6 +245,34 @@ public class UserInfoService {
             }else{
                 res.put("status","400");
                 res.put("message","用户不存在");
+            }
+        }catch (Exception e){
+            res.put("status","500");
+            res.put("message","error");
+        }
+        return res;
+    }
+
+    public Map<String,Object> updateUser(String openid,String nickname,String avatarUrl){
+        Map<String,Object> res=new TreeMap<>();
+        try {
+            logger.info(openid+","+nickname+","+avatarUrl);
+            String md5Code= MD5Utils.MD5(nickname+avatarUrl);
+            int hasDeviceByOpenId = deviceInfoDao.selectRelationNum2(openid);
+            int hasDeviceByMD5 = deviceInfoDao.selectRelationNum(md5Code);
+            if(hasDeviceByOpenId != 0 && hasDeviceByMD5 == 0) {     // 新老用户 - 存在openId，hasDeviceByMD5=0，说明用户更新了昵称或头像
+                deviceInfoDao.updateMD5Code(openid,md5Code,nickname,avatarUrl);
+                userInfoDao.updateMD5Code(openid,md5Code);
+                res.put("status","200");
+                res.put("message","success");
+            } else if(hasDeviceByOpenId == 0 && hasDeviceByMD5 != 0) {          // 不存在openId,但是存在MD5Code,说明是老用户，需要更新一下openId
+                deviceInfoDao.updateOpenId(openid,md5Code);
+                userInfoDao.updateOpenId(openid,md5Code);
+                res.put("status","200");
+                res.put("message","success");
+            } else {
+                res.put("status","200");
+                res.put("message","无需更新");
             }
         }catch (Exception e){
             res.put("status","500");

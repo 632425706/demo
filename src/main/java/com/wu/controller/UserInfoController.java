@@ -5,6 +5,7 @@ import com.wu.bean.UserList;
 import com.wu.dao.DeviceInfoDao;
 import com.wu.dao.UserInfoDao;
 import com.wu.service.UserInfoService;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,9 +36,16 @@ public class UserInfoController {
     @RequestMapping("/syncinfo")
     @ResponseBody
     public Map<String,Object> syncOpenId(String openid,String nickname,String avatarurl){
-       return userInfoService.syncInfo(openid,nickname,avatarurl);
+        return userInfoService.syncInfo(openid,nickname,avatarurl);
     }
-//    public Map<String, Object> genUser(String name,String gender,String phone,String birthday,String calender,String nickName,String avatarUrl){
+
+    @RequestMapping("/updateUser")
+    @ResponseBody
+    public Map<String,Object> updateUser(String openid,String nickname,String avatarurl){
+        return userInfoService.updateUser(openid,nickname,avatarurl);
+    }
+
+    //    public Map<String, Object> genUser(String name,String gender,String phone,String birthday,String calender,String nickName,String avatarUrl){
 //        return userInfoService.insertOne(name,gender,phone,birthday,calender,nickName,avatarUrl);
 //    }
     @RequestMapping( "/getUserList" )

@@ -47,4 +47,6 @@ public interface UserInfoDao {
     public List<UserInfo> getNewPerson(@Param("xzCode") int xzCode);
     @Select("update userinfo set openid=#{openid} where md5Code=#{md5Code}")
     public int updateOpenId(@Param("openid")String openid,@Param("md5Code") String md5Code);
+    @Select("update userinfo set md5Code=#{md5Code} where openid=#{openid}")
+    public int updateMD5Code(@Param("openid")String openid,@Param("md5Code") String md5Code);
 }
