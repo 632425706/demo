@@ -5,6 +5,7 @@ import com.wu.bean.UserList;
 import com.wu.dao.DeviceInfoDao;
 import com.wu.dao.UserInfoDao;
 import com.wu.service.UserInfoService;
+import com.wu.util.HttpUtil;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 作者    吴振涛
@@ -59,6 +61,15 @@ public class UserInfoController {
     @ResponseBody
     public List<UserInfo> getNesPerson(int xzCode) throws ParseException {
         return userInfoService.selectNewPerson(xzCode);
+    }
+
+    @RequestMapping("/code2session")
+    @ResponseBody
+    public String code2Session(String code){
+        String url="https://api.weixin.qq.com/sns/jscode2session?appid=wx880966673afda1e7&secret=7186845774d633d0eb956210d5dfc6fe&js_code="+code+"&grant_type=authorization_code";
+        Map map =new TreeMap();
+        String resp = HttpUtil.sendHttpsGet(url,map,map,true);
+        return resp;
     }
 
 }

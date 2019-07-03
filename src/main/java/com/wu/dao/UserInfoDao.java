@@ -18,8 +18,8 @@ import java.util.List;
  */
 @Repository
 public interface UserInfoDao {
-    @Insert("insert into userinfo(name,gender,phone,birthDate,md5Code,solar,xzCode)" +
-            " values(#{name},#{gender},#{phone},#{birthDate},#{md5Code},#{solar},#{xzCode})")
+    @Insert("insert into userinfo(openid,name,gender,phone,birthDate,md5Code,solar,xzCode)" +
+            " values(#{openid},#{name},#{gender},#{phone},#{birthDate},#{md5Code},#{solar},#{xzCode})")
     public int genTask(UserInfo userInfo);
     @Select("select count(*) from userinfo where name=#{name} and phone=#{phone}")
     public int selectNameNum(@Param("name") String name, @Param("phone") String phone);
@@ -31,7 +31,7 @@ public interface UserInfoDao {
     public List<UserInfo> selectAllByDevice2(@Param("openid") String openid);
     @Select("select * from userinfo where name=#{name} and phone=#{phone}")
     public UserInfo getPerson(@Param("name") String name, @Param("phone") String phone);
-    @Update("update userinfo set gender=#{gender},birthDate=#{birthDate},solar=#{solar},xzCode=#{xzCode} where name=#{name} and phone=#{phone}")
+    @Update("update userinfo set openid=#{openid},gender=#{gender},birthDate=#{birthDate},solar=#{solar},xzCode=#{xzCode} where name=#{name} and phone=#{phone}")
     public void updateInfo(UserInfo userInfo);
     @Update("update userinfo set md5Code=#{md5Code} where name=#{name} and phone=#{phone}")
     public void upDevice(UserInfo userInfo);
